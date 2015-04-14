@@ -59,7 +59,14 @@ function gfg_post_gallery_filter( $output, $attr ){
             $output .= '<ul class="slides">';
 
             foreach ( $attachments as $key => $attachment) {
-                $output .= '<li>' . wp_get_attachment_image( $attachment->ID, $atts['size'] ) . '</li>';
+                $output .= '<li class="gallery-item">';
+                $output .= wp_get_attachment_image( $attachment->ID, $atts['size'] ) ;
+
+                if( ! empty ( $attachment->post_excerpt ) ){
+                    $output .= "<p class='gallery-caption wp-caption-text'>{$attachment->post_excerpt}</p>";
+                }
+
+                $output .= '</li>';
             }
             $output .= '</ul>';
             $output .= '</div>';
