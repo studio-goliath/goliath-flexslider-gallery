@@ -75,3 +75,65 @@ function gfg_post_gallery_filter( $output, $attr ){
 
 }
 add_filter( 'post_gallery', 'gfg_post_gallery_filter', 10, 2 );
+
+
+/**
+ * Outputs a view template which can be used with wp.media.template
+ */
+function gfg_print_media_templates() {
+
+    // We add the gallery type setting
+    $default_gallery_type = apply_filters( 'gfg_default_gallery_type', 'flexslider' );
+
+    $gallery_types = array(
+        'default'       => 'Default',
+        'flexslider'    => 'Flexslider'
+        );
+
+    ?>
+    <script type="text/html" id="tmpl-gfg-settings">
+        <label class="setting">
+            <span><?php _e( 'Type', 'flexslider' ); ?></span>
+            <select class="type" name="type" data-setting="type">
+                <?php foreach ( $gallery_types as $value => $caption ) : ?>
+                    <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $default_gallery_type ); ?>><?php echo esc_html( $caption ); ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+    </script>
+    <?php
+
+
+}
+function gfg_custom_wp_admin_style( $hook ){
+
+    wp_enqueue_script( 'gfg-admin-scripts', plugins_url( 'js/admin-scripts.js', __FILE__ ), array( 'media-views' ), '20121225' );
+
+}
+
+
+function gfg_add_jetpack_type_gallery( $types ){
+
+    $types['flexslider'] = 'Flexslider';
+
+    return $types;
+}
+
+function gfg_add_gallery_setting(){
+
+    if ( class_exists( 'Jetpack' ) && Jetpack::is_module_active( 'tiled-gallery' ) ) {
+
+        add_filter( 'jetpack_gallery_types', function ( $types ){
+            $types['flexslider'] = 'Flexslider';
+            return $types;
+        } );
+        add_filter( 'jetpack_default_gallery_type', function (){ return apply_filters( 'gfg_default_gallery_type', 'flexslider' ); } );
+
+    } else {
+
+        add_action( 'wp_enqueue_media', 'gfg_custom_wp_admin_style' );
+        add_action( 'print_media_templates', 'gfg_print_media_templates' );
+
+    }
+}
+add_action( 'plugins_loaded', 'gfg_add_gallery_setting' );
