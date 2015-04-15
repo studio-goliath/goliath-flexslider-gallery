@@ -40,6 +40,7 @@ function gfg_post_gallery_filter( $output, $attr ){
         $atts = shortcode_atts( array(
             'size'       => 'large',
             'include'    => '',
+            'animation'  => 'fade',
         ), $attr, 'gallery' );
 
         $attachments = get_posts(
@@ -55,7 +56,7 @@ function gfg_post_gallery_filter( $output, $attr ){
 
         if( $attachments ){
 
-            $output = '<div class="flexslider">';
+            $output = "<div class='flexslider' data-animation='{$atts['animation']}'>";
             $output .= '<ul class="slides">';
 
             foreach ( $attachments as $key => $attachment) {
@@ -87,7 +88,7 @@ add_filter( 'post_gallery', 'gfg_post_gallery_filter', 10, 2 );
 /**
  * Outputs a view template which can be used with wp.media.template
  */
-function gfg_print_media_templates() {
+function gfg_print_media_temple_type_gallery() {
 
     // We add the gallery type setting
     $default_gallery_type = apply_filters( 'gfg_default_gallery_type', 'flexslider' );
@@ -98,7 +99,7 @@ function gfg_print_media_templates() {
         );
 
     ?>
-    <script type="text/html" id="tmpl-gfg-settings">
+    <script type="text/html" id="tmpl-gfg-type-settings">
         <label class="setting">
             <span><?php _e( 'Type', 'flexslider' ); ?></span>
             <select class="type" name="type" data-setting="type">
@@ -114,9 +115,27 @@ function gfg_print_media_templates() {
 }
 function gfg_custom_wp_admin_style( $hook ){
 
-    wp_enqueue_script( 'gfg-admin-scripts', plugins_url( 'js/admin-scripts.js', __FILE__ ), array( 'media-views' ), '20121225' );
+    wp_enqueue_script( 'gfg-admin-scripts', plugins_url( 'js/admin-scripts.js', __FILE__ ), array( 'media-views' ), '20150414' );
 
 }
+add_action( 'wp_enqueue_media', 'gfg_custom_wp_admin_style' );
+
+function gfg_print_media_templates(){
+    ?>
+    <script type="text/html" id="tmpl-gfg-animation-settings">
+        <label class="setting setting-flexslider">
+            <span><?php _e( 'Animation', 'flexslider' ); ?></span>
+            <select class="type" name="animation" data-setting="animation">
+
+                <option value="fade" selected="selected">Fade</option>
+                <option value="slide" >Slide</option>
+
+            </select>
+        </label>
+    </script>
+    <?php
+}
+add_action( 'print_media_templates', 'gfg_print_media_templates' );
 
 
 function gfg_add_jetpack_type_gallery( $types ){
@@ -138,8 +157,7 @@ function gfg_add_gallery_setting(){
 
     } else {
 
-        add_action( 'wp_enqueue_media', 'gfg_custom_wp_admin_style' );
-        add_action( 'print_media_templates', 'gfg_print_media_templates' );
+        add_action( 'print_media_templates', 'gfg_print_media_temple_type_gallery' );
 
     }
 }

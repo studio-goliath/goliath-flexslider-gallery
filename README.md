@@ -12,10 +12,6 @@ This plugin use the awesome Flexslider : http://www.woothemes.com/flexslider/
 Usage
 -----
 
-Add a gallery to your WordPress post. Go to the "Text" Tab of the WordPress editor and add **type="flexslider"** in the [gallery] shortcode.
+Add a gallery to your WordPress post. In the settings tab of the gallery choose *type = "flexslider"*
 
-Example :
-
-```
-[gallery ids="57,58,59" type="flexslider"]
-```
+You can choose the animation of your slider gallery between *slide* and *fade*
