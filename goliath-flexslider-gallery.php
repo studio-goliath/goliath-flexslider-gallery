@@ -1,7 +1,7 @@
 <?php
 /*
- * Plugin Name: Goliath Flexslider gallery
- * Description: Display post gallery whith flexslider
+ * Plugin Name: Goliath slider gallery
+ * Description: Display post gallery whith slider
  * Version: 0.1
  * Author: Studio Goliath
  * Author URI: http://www.studio-goliath.fr
@@ -11,15 +11,14 @@
 
 /**
  *
- * Register Flaxslider CSS and JS
+ * Register Slider CSS and JS
  *
  */
 function gfg_register_script(){
 
-    wp_register_style( 'gfg_flexslider_css',  plugins_url( "css/flexslider.css", __FILE__ ) );
-
-    wp_register_script( 'gfg_flexslider_js',  plugins_url( "js/jquery.flexslider-min.js", __FILE__ ), array( 'jquery'), '2.2.2', true );
-    wp_register_script( 'gfg_goliath_flexslider_js',  plugins_url( "js/goliath-flexslider.js", __FILE__ ), array( 'jquery', 'gfg_flexslider_js'), '0.1', true );
+    wp_register_style( 'gfg_slider_css',  plugins_url( "css/slick.css", __FILE__ ) );
+    wp_register_script( 'gfg_slider_js',  plugins_url( "js/slick.min.js", __FILE__ ), array( 'jquery'), '3.0', true );
+    wp_register_script( 'gfg_goliath_slider_js',  plugins_url( "js/goliath-slider.js", __FILE__ ), array( 'jquery', 'gfg_slider_js'), '0.1', true );
 }
 
 add_action('wp_enqueue_scripts', 'gfg_register_script');
@@ -27,7 +26,7 @@ add_action('wp_enqueue_scripts', 'gfg_register_script');
 
 /**
  *
- * Filter the gallery output to display the flexslider
+ * Filter the gallery output to display the slider
  * @param  array $attr Attributes of the gallery shortcode.
  * @return string
  *
@@ -35,12 +34,12 @@ add_action('wp_enqueue_scripts', 'gfg_register_script');
 function gfg_post_gallery_filter( $output, $attr ){
 
 
-    if( isset( $attr['type'] ) && 'flexslider' == $attr['type'] ){
+    if( isset( $attr['type'] ) && 'slider' == $attr['type'] ){
 
         $atts = shortcode_atts( array(
             'size'       => 'large',
             'include'    => '',
-            'animation'  => 'fade',
+            'animation'  => 'slide',
         ), $attr, 'gallery' );
 
         $attachments = get_posts(
@@ -56,8 +55,11 @@ function gfg_post_gallery_filter( $output, $attr ){
 
         if( $attachments ){
 
-            $output = "<div class='flexslider' data-animation='{$atts['animation']}'>";
-            $output .= '<ul class="slides">';
+            if('fade'== $atts['animation']){
+                $output .= "<ul class='slick-gallery' data-slick='{\"fade\": true }'>";
+            }else{
+                $output .= "<ul class='slick-gallery'>";
+            }
 
             foreach ( $attachments as $key => $attachment) {
                 $output .= '<li class="gallery-item">';
@@ -70,11 +72,10 @@ function gfg_post_gallery_filter( $output, $attr ){
                 $output .= '</li>';
             }
             $output .= '</ul>';
-            $output .= '</div>';
 
-            wp_enqueue_style( 'gfg_flexslider_css' );
-            wp_enqueue_script( 'gfg_flexslider_js' );
-            wp_enqueue_script( 'gfg_goliath_flexslider_js' );
+            wp_enqueue_style( 'gfg_slider_css' );
+            wp_enqueue_script( 'gfg_slider_js' );
+            wp_enqueue_script( 'gfg_goliath_slider_js' );
         }
 
     }
@@ -91,17 +92,17 @@ add_filter( 'post_gallery', 'gfg_post_gallery_filter', 10, 2 );
 function gfg_print_media_temple_type_gallery() {
 
     // We add the gallery type setting
-    $default_gallery_type = apply_filters( 'gfg_default_gallery_type', 'flexslider' );
+    $default_gallery_type = apply_filters( 'gfg_default_gallery_type', 'slider' );
 
     $gallery_types = array(
         'default'       => 'Default',
-        'flexslider'    => 'Flexslider'
+        'slider'    => 'Slider'
         );
 
     ?>
     <script type="text/html" id="tmpl-gfg-type-settings">
         <label class="setting">
-            <span><?php _e( 'Type', 'flexslider' ); ?></span>
+            <span><?php _e( 'Type', 'slider' ); ?></span>
             <select class="type" name="type" data-setting="type">
                 <?php foreach ( $gallery_types as $value => $caption ) : ?>
                     <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $default_gallery_type ); ?>><?php echo esc_html( $caption ); ?></option>
@@ -111,20 +112,23 @@ function gfg_print_media_temple_type_gallery() {
     </script>
     <?php
 
-
 }
+
+
 function gfg_custom_wp_admin_style( $hook ){
 
-    wp_enqueue_script( 'gfg-admin-scripts', plugins_url( 'js/admin-scripts.js', __FILE__ ), array( 'media-views' ), '20150414' );
+    wp_enqueue_script( 'gfg-admin-scripts', plugins_url( 'js/admin-scripts.js', __FILE__ ), array( 'media-views' ), '20160909' );
 
 }
 add_action( 'wp_enqueue_media', 'gfg_custom_wp_admin_style' );
 
+
+
 function gfg_print_media_templates(){
     ?>
     <script type="text/html" id="tmpl-gfg-animation-settings">
-        <label class="setting setting-flexslider">
-            <span><?php _e( 'Animation', 'flexslider' ); ?></span>
+        <label class="setting setting-slider">
+            <span><?php _e( 'Animation', 'slider' ); ?></span>
             <select class="type" name="animation" data-setting="animation">
 
                 <option value="fade" selected="selected">Fade</option>
@@ -140,7 +144,7 @@ add_action( 'print_media_templates', 'gfg_print_media_templates' );
 
 function gfg_add_jetpack_type_gallery( $types ){
 
-    $types['flexslider'] = 'Flexslider';
+    $types['slider'] = 'slider';
 
     return $types;
 }
@@ -150,10 +154,10 @@ function gfg_add_gallery_setting(){
     if ( class_exists( 'Jetpack' ) && Jetpack::is_module_active( 'tiled-gallery' ) ) {
 
         add_filter( 'jetpack_gallery_types', function ( $types ){
-            $types['flexslider'] = 'Flexslider';
+            $types['slider'] = 'slider';
             return $types;
         } );
-        add_filter( 'jetpack_default_gallery_type', function (){ return apply_filters( 'gfg_default_gallery_type', 'flexslider' ); } );
+        add_filter( 'jetpack_default_gallery_type', function (){ return apply_filters( 'gfg_default_gallery_type', 'slider' ); } );
 
     } else {
 

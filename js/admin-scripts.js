@@ -25,7 +25,7 @@
             $el.find( 'select[name=type]' ).on( 'change', function () {
                 var columnSetting = $el.find( 'select[name=columns]' ).closest( 'label.setting' );
                 var linkToSetting = $el.find( 'select[data-setting=link]' ).closest( 'label.setting' );
-                var flexsliderSetting = $el.find( 'label.setting-flexslider' );
+                var sliderSetting = $el.find( 'label.setting-slider' );
 
                 if ( 'default' === $( this ).val() ) {
                     columnSetting.show();
@@ -35,10 +35,10 @@
                     linkToSetting.hide();
                 }
 
-                if ( 'flexslider' === $( this ).val() ) {
-                    flexsliderSetting.show();
+                if ( 'slider' === $( this ).val() ) {
+                    sliderSetting.show();
                 } else {
-                    flexsliderSetting.hide();
+                    sliderSetting.hide();
                 }
 
             } ).change();

@@ -1,17 +1,17 @@
 Goliath flexslider gallery
 ==========================
 
-WordPress plugin to show gallery as Flexslider
+WordPress plugin to show gallery as slider
 
 Flexslider
 ----------
 
-This plugin use the awesome Flexslider : http://www.woothemes.com/flexslider/
+This plugin use the awesome Slick carousel : http://kenwheeler.github.io/slick/
 
 
 Usage
 -----
 
-Add a gallery to your WordPress post. In the settings tab of the gallery choose *type = "flexslider"*
+Add a gallery to your WordPress post. In the settings tab of the gallery choose *type = "slider"*
 
 You can choose the animation of your slider gallery between *slide* and *fade*
