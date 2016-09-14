@@ -10,4 +10,12 @@ jQuery(window).load(function() {
             prevArrow:'<i class="icon-arrow-left"></i>',
             nextArrow:'<i class="icon-arrow-right"></i>',
         });
+
+    jQuery(window).on('slickRefresh', function(){
+
+        jQuery('.slick-gallery').slick('setOption','', '', true);
+
+    });
+
+
 });

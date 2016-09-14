@@ -1,6 +1,6 @@
 <?php
 /*
- * Plugin Name: Goliath slider gallery
+ * Plugin Name: Goliath Flexslider gallery
  * Description: Display post gallery whith slider
  * Version: 0.1
  * Author: Studio Goliath
@@ -11,7 +11,7 @@
 
 /**
  *
- * Register Slider CSS and JS
+ * Register Flaxslider CSS and JS
  *
  */
 function gfg_register_script(){
@@ -39,7 +39,7 @@ function gfg_post_gallery_filter( $output, $attr ){
         $atts = shortcode_atts( array(
             'size'       => 'large',
             'include'    => '',
-            'animation'  => 'slide',
+            'animation'  => 'fade',
         ), $attr, 'gallery' );
 
         $attachments = get_posts(
@@ -55,11 +55,8 @@ function gfg_post_gallery_filter( $output, $attr ){
 
         if( $attachments ){
 
-            if('fade'== $atts['animation']){
-                $output .= "<ul class='slick-gallery' data-slick='{\"fade\": true }'>";
-            }else{
-                $output .= "<ul class='slick-gallery'>";
-            }
+
+            $output .= "<ul class='slick-gallery' data-animation={$atts['animation']}>";
 
             foreach ( $attachments as $key => $attachment) {
                 $output .= '<li class="gallery-item">';
@@ -74,7 +71,6 @@ function gfg_post_gallery_filter( $output, $attr ){
             $output .= '</ul>';
 
             wp_enqueue_style( 'gfg_slider_css' );
-            wp_enqueue_script( 'gfg_slider_js' );
             wp_enqueue_script( 'gfg_goliath_slider_js' );
         }
 
@@ -96,7 +92,7 @@ function gfg_print_media_temple_type_gallery() {
 
     $gallery_types = array(
         'default'       => 'Default',
-        'slider'    => 'Slider'
+        'slider'    => 'Slick'
         );
 
     ?>
@@ -144,7 +140,7 @@ add_action( 'print_media_templates', 'gfg_print_media_templates' );
 
 function gfg_add_jetpack_type_gallery( $types ){
 
-    $types['slider'] = 'slider';
+    $types['slider'] = 'Flexslider';
 
     return $types;
 }
@@ -154,7 +150,7 @@ function gfg_add_gallery_setting(){
     if ( class_exists( 'Jetpack' ) && Jetpack::is_module_active( 'tiled-gallery' ) ) {
 
         add_filter( 'jetpack_gallery_types', function ( $types ){
-            $types['slider'] = 'slider';
+            $types['slider'] = 'Flexslider';
             return $types;
         } );
         add_filter( 'jetpack_default_gallery_type', function (){ return apply_filters( 'gfg_default_gallery_type', 'slider' ); } );
