@@ -2,18 +2,18 @@
  * Script for the Goliath slider gallery plugin
  */
 
-jQuery(window).load(function() {
+jQuery( function( $ ) {
 
-    jQuery('.slick-gallery').slick({
+    $('.slick-gallery').slick({
             dots: true,
             adaptiveHeight: true,
-            prevArrow:'<i class="icon-arrow-left"></i>',
-            nextArrow:'<i class="icon-arrow-right"></i>',
+            prevArrow:'<i class="icon-arrow-left slick-prev"></i>',
+            nextArrow:'<i class="icon-arrow-right slick-next"></i>'
         });
 
-    jQuery(window).on('slickRefresh', function(){
+    $(window).on('slickRefresh', function(){
 
-        jQuery('.slick-gallery').slick('setOption','', '', true);
+        $('.slick-gallery').slick('setOption','', '', true);
 
     });
 

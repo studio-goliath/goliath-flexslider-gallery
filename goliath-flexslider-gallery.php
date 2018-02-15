@@ -56,22 +56,30 @@ function gfg_post_gallery_filter( $output, $attr ){
         if( $attachments ){
 
 
-            $output .= "<ul class='slick-gallery' data-animation={$atts['animation']}>";
+            $output .= "<div class='slick-gallery' data-animation={$atts['animation']}>";
 
             foreach ( $attachments as $key => $attachment) {
-                $output .= '<li class="gallery-item">';
-                $output .= wp_get_attachment_image( $attachment->ID, $atts['size'] ) ;
 
+                // Has caption
                 if( ! empty ( $attachment->post_excerpt ) ){
-                    $output .= "<p class='gallery-caption wp-caption-text'>{$attachment->post_excerpt}</p>";
+                    $output .= '<figure class="gallery-item">';
+                    $output .= wp_get_attachment_image( $attachment->ID, $atts['size'] ) ;
+                    $output .= "<figcaption class='gallery-caption wp-caption-text'>{$attachment->post_excerpt}</figcaption>";
+                    $output .= '</figure>';
+
+                } else {
+                    $output .= '<div class="gallery-item">';
+                    $output .= wp_get_attachment_image( $attachment->ID, $atts['size'] ) ;
+                    $output .= '</div>';
+
                 }
 
-                $output .= '</li>';
             }
-            $output .= '</ul>';
+            $output .= '</div>';
 
             wp_enqueue_style( 'gfg_slider_css' );
             wp_enqueue_script( 'gfg_goliath_slider_js' );
+
         }
 
     }
@@ -91,8 +99,8 @@ function gfg_print_media_temple_type_gallery() {
     $default_gallery_type = apply_filters( 'gfg_default_gallery_type', 'slider' );
 
     $gallery_types = array(
-        'default'       => 'Default',
-        'slider'    => 'Slick'
+        'default'   => 'Default',
+        'slider'    => 'Slider'
         );
 
     ?>
@@ -140,7 +148,7 @@ add_action( 'print_media_templates', 'gfg_print_media_templates' );
 
 function gfg_add_jetpack_type_gallery( $types ){
 
-    $types['slider'] = 'Flexslider';
+    $types['slider'] = 'Slider';
 
     return $types;
 }
@@ -150,7 +158,7 @@ function gfg_add_gallery_setting(){
     if ( class_exists( 'Jetpack' ) && Jetpack::is_module_active( 'tiled-gallery' ) ) {
 
         add_filter( 'jetpack_gallery_types', function ( $types ){
-            $types['slider'] = 'Flexslider';
+            $types['slider'] = 'Slider';
             return $types;
         } );
         add_filter( 'jetpack_default_gallery_type', function (){ return apply_filters( 'gfg_default_gallery_type', 'slider' ); } );
