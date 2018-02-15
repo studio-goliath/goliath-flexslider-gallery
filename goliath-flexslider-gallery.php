@@ -17,7 +17,7 @@
 function gfg_register_script(){
 
     wp_register_style( 'gfg_slider_css',  plugins_url( "css/slick.css", __FILE__ ) );
-    wp_register_script( 'gfg_slider_js',  plugins_url( "js/slick.min.js", __FILE__ ), array( 'jquery'), '3.0', true );
+    wp_register_script( 'gfg_slider_js',  plugins_url( "js/slick.min.js", __FILE__ ), array( 'jquery'), '1.8.1', true );
     wp_register_script( 'gfg_goliath_slider_js',  plugins_url( "js/goliath-slider.js", __FILE__ ), array( 'jquery', 'gfg_slider_js'), '0.1', true );
 }
 
