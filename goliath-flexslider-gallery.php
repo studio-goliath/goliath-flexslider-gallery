@@ -61,11 +61,11 @@ function gfg_post_gallery_filter( $output, $attr ){
                 'fade'              => $atts['animation'] === 'fade'
             );
 
-            $slick_option = apply_filters( 'goliath-flexslider-gallery-options', $slick_option, $atts );
+            $slick_option = apply_filters( 'gfg_gallery_options', $slick_option, $atts );
 
-            $slick_option = json_encode( $slick_option );
+            $slick_option = wp_json_encode( $slick_option );
 
-            $output .= "<div class='slick-gallery' data-slick='{$slick_option}'>";
+            $output .= '<div class="slick-gallery" data-slick="' . esc_attr( $slick_option ) .'">';
 
             foreach ( $attachments as $key => $attachment) {
 
@@ -108,14 +108,14 @@ function gfg_print_media_temple_type_gallery() {
     $default_gallery_type = apply_filters( 'gfg_default_gallery_type', 'slider' );
 
     $gallery_types = array(
-        'default'   => 'Default',
-        'slider'    => 'Slider'
+        'default'   => __( 'Default', 'goliath-flexslider-gallery' ),
+        'slider'    => __( 'Slider', 'goliath-flexslider-gallery' )
         );
 
     ?>
     <script type="text/html" id="tmpl-gfg-type-settings">
         <label class="setting">
-            <span><?php _e( 'Type', 'slider' ); ?></span>
+            <span><?php _e( 'Type', 'goliath-flexslider-gallery' ); ?></span>
             <select class="type" name="type" data-setting="type">
                 <?php foreach ( $gallery_types as $value => $caption ) : ?>
                     <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $default_gallery_type ); ?>><?php echo esc_html( $caption ); ?></option>
@@ -141,11 +141,11 @@ function gfg_print_media_templates(){
     ?>
     <script type="text/html" id="tmpl-gfg-animation-settings">
         <label class="setting setting-slider">
-            <span><?php _e( 'Animation', 'slider' ); ?></span>
+            <span><?php esc_attr_e( 'Animation', 'goliath-flexslider-gallery' ); ?></span>
             <select class="type" name="animation" data-setting="animation">
 
-                <option value="fade" selected="selected">Fade</option>
-                <option value="slide" >Slide</option>
+                <option value="fade" selected="selected"><?php esc_attr_e( 'Fade', 'goliath-flexslider-gallery' ); ?></option>
+                <option value="slide" ><?php esc_attr_e( 'Slide', 'goliath-flexslider-gallery' ); ?></option>
 
             </select>
         </label>
@@ -157,7 +157,7 @@ add_action( 'print_media_templates', 'gfg_print_media_templates' );
 
 function gfg_add_jetpack_type_gallery( $types ){
 
-    $types['slider'] = 'Slider';
+    $types['slider'] = __( 'Slider', 'goliath-flexslider-gallery' );
 
     return $types;
 }
