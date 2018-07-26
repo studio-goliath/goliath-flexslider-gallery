@@ -18,7 +18,7 @@ function gfg_register_script(){
 
     wp_register_style( 'gfg_slider_css',  plugins_url( "css/slick.css", __FILE__ ) );
     wp_register_script( 'gfg_slider_js',  plugins_url( "js/slick.min.js", __FILE__ ), array( 'jquery'), '1.8.1', true );
-    wp_register_script( 'gfg_goliath_slider_js',  plugins_url( "js/goliath-slider.js", __FILE__ ), array( 'jquery', 'gfg_slider_js'), '0.1', true );
+    wp_register_script( 'gfg_goliath_slider_js',  plugins_url( "js/goliath-slider.js", __FILE__ ), array( 'jquery', 'gfg_slider_js'), '0.2', true );
 }
 
 add_action('wp_enqueue_scripts', 'gfg_register_script');
@@ -55,8 +55,17 @@ function gfg_post_gallery_filter( $output, $attr ){
 
         if( $attachments ){
 
+            $slick_option = array(
+                'dots'              => true,
+                'adaptiveHeight'    => true,
+                'fade'              => $atts['animation'] === 'fade'
+            );
 
-            $output .= "<div class='slick-gallery' data-animation={$atts['animation']}>";
+            $slick_option = apply_filters( 'goliath-flexslider-gallery-options', $slick_option, $atts );
+
+            $slick_option = json_encode( $slick_option );
+
+            $output .= "<div class='slick-gallery' data-slick='{$slick_option}'>";
 
             foreach ( $attachments as $key => $attachment) {
 
